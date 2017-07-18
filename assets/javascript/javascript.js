@@ -1,4 +1,51 @@
 $(document).ready(function() {
+
+  /************************************************************************************
+  *************************************************************************************
+                        _  _        
+       /\              | |(_)       
+      /  \   _   _   __| | _   ___  
+     / /\ \ | | | | / _` || | / _ \ 
+    / ____ \| |_| || (_| || || (_) |
+   /_/    \_\\__,_| \__,_||_| \___/ 
+
+  *************************************************************************************
+  *************************************************************************************/
+
+  var allAudio = {
+    volume: true,
+    hit: new Audio("assets/audio/lightsaber.mp3"),
+    music: new Audio("assets/audio/theme.mp3")
+  };
+  allAudio.music.loop = true;
+
+  $("#volumeButton").on("click", function() {
+    if (allAudio.volume) {
+      $("#volumeButton").attr("class", "glyphicon glyphicon-volume-off");
+      allAudio.hit.muted = true;
+      allAudio.music.muted = true;
+    }
+    else {
+      $("#volumeButton").attr("class","glyphicon glyphicon-volume-up");
+      allAudio.hit.muted = false;
+      allAudio.music.muted = false;
+    }
+    allAudio.volume = !allAudio.volume;
+  });
+
+
+/************************************************************************************
+*************************************************************************************
+   _____                         
+  / ____|                        
+ | |  __   __ _  _ __ ___    ___ 
+ | | |_ | / _` || '_ ` _ \  / _ \
+ | |__| || (_| || | | | | ||  __/
+  \_____| \__,_||_| |_| |_| \___|
+
+*************************************************************************************
+*************************************************************************************/
+
   var starWarsRPG = {
     currentPlayer: -1,
     currentOpponent: -1,
@@ -44,6 +91,7 @@ $(document).ready(function() {
   }
 
   $("body").on("click", ".choose-character", function() {
+    allAudio.music.play();
     starWarsRPG.currentPlayer = parseInt($(this).attr("value"));
     $("#start-screen").css("visibility", "hidden");
     var i = starWarsRPG.remainingOpponents.indexOf(parseInt(starWarsRPG.currentPlayer));
@@ -79,6 +127,8 @@ $(document).ready(function() {
 
   $("#action").on("click", function() {
     starWarsRPG.currentOpponentHealth -= starWarsRPG.currentAP;
+    allAudio.hit.load();
+    allAudio.hit.play();
     var resultOfAttack = "<p>" + character[starWarsRPG.currentPlayer].name + " attacks for " + starWarsRPG.currentAP + " damage.</p>"
     var newPercent = starWarsRPG.currentOpponentHealth / character[starWarsRPG.currentOpponent].hp * 100;
     $("#opponentHP").css("width", newPercent + "%");

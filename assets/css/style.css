@@ -13,6 +13,16 @@
   color:white;
 }
 
+#volumeButton {
+  position: fixed;
+  top:2%;
+  left:2%;
+  font-size: 5vh;
+  z-index: 1000;
+  background-color: blue;
+  color:white; 
+}
+
 #start-screen {
   text-align: center;
   position:fixed;
@@ -34,7 +44,7 @@
 }
 
 #opponents p {
-  font-size:2vh;
+  font-size:1.5vh;
 }
 
 #opponents {
@@ -63,12 +73,6 @@
 
 #myChar img, #oppChar img{
   width:100%;
-}
-
-#opponentHP {
-  background-color: red;
-  display: block;
-  float:left;
 }
 
 #myHealth, #opponentHealth{
