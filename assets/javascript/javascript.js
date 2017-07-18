@@ -1,30 +1,31 @@
 $(document).ready(function() {
- 
-  var currentPlayer = -1;
-  var currentOpponent = -1;
-  var remainingOpponents = [0,1,2,3];
-  var currentPlayerHealth = 0;
-  var currentOpponentHealth = 0;
-  var currentAP = 0;
-  
+  var starWarsRPG = {
+    currentPlayer: -1,
+    currentOpponent: -1,
+    remainingOpponents: [0,1,2,3],
+    currentPlayerHealth: 0,
+    currentOpponentHealth: 0,
+    currentAP: 1,
+    opponentDead: false
+  }
+
   function addChars(chooseType, displayArea) {
     displayArea.html("");
-    for(var i=0;i<remainingOpponents.length;i++) {
+    for(var i=0;i<starWarsRPG.remainingOpponents.length;i++) {
       var newDiv = $("<div>");
       var innerDiv = $("<div>");
-      newDiv.addClass("col-xs-3 character-" + (remainingOpponents[i]+1));
-      innerDiv.attr("value", remainingOpponents[i]);
-      innerDiv.attr("name", character[remainingOpponents[i]].name);
+      newDiv.addClass("col-xs-3 character-" + (starWarsRPG.remainingOpponents[i]+1));
+      innerDiv.attr("value", starWarsRPG.remainingOpponents[i]);
+      innerDiv.attr("name", character[starWarsRPG.remainingOpponents[i]].name);
       innerDiv.addClass("icon " + chooseType);
-      innerDiv.css("background", "url(assets/images/background.jpg) no-repeat center center");
-      innerDiv.css("background-size","contain");
-      innerDiv.css("background-color","black");
-      displayText(innerDiv, character[remainingOpponents[i]].name);
-      displayText(innerDiv, "HP: " + character[remainingOpponents[i]].hp);
-      displayText(innerDiv, "Attack: " + character[remainingOpponents[i]].ap);
-      displayImage(innerDiv, character[remainingOpponents[i]].pic);
+      displayText(innerDiv, character[starWarsRPG.remainingOpponents[i]].name);
+      displayText(innerDiv, "HP: " + character[starWarsRPG.remainingOpponents[i]].hp);
+      displayText(innerDiv, "Attack: " + character[starWarsRPG.remainingOpponents[i]].ap);
+      displayText(innerDiv, "Counter Attack: " + character[starWarsRPG.remainingOpponents[i]].counter);
+      displayImage(innerDiv, "background.jpg")
+      displayImage(innerDiv, character[starWarsRPG.remainingOpponents[i]].pic);
       displayArea.append(newDiv);
-      $(".character-"+(remainingOpponents[i]+1)).append(innerDiv);
+      $(".character-"+(starWarsRPG.remainingOpponents[i]+1)).append(innerDiv);
     }
   }
 
@@ -43,53 +44,85 @@ $(document).ready(function() {
   }
 
   $("body").on("click", ".choose-character", function() {
-    currentPlayer = parseInt($(this).attr("value"));
+    starWarsRPG.currentPlayer = parseInt($(this).attr("value"));
     $("#start-screen").css("visibility", "hidden");
-    var i = remainingOpponents.indexOf(parseInt(currentPlayer));
-    remainingOpponents.splice(i,1);
+    var i = starWarsRPG.remainingOpponents.indexOf(parseInt(starWarsRPG.currentPlayer));
+    starWarsRPG.remainingOpponents.splice(i,1);
     addChars("choose-opponent", $("#opponents"));
-    displayImage($("#myChar"), character[currentPlayer].jpeg);
+    displayImage($("#myChar"), character[starWarsRPG.currentPlayer].jpeg);
     $("#myHP").css("width","100%");
-    $("#myHealth").html("<span>" + character[currentPlayer].hp + " HP</span>");
-    currentPlayerHealth = character[currentPlayer].hp;
-    currentAP = character[currentPlayer].ap;
+    $("#myHealth").html("<span>" + character[starWarsRPG.currentPlayer].hp + " HP</span>");
+    starWarsRPG.currentPlayerHealth = character[starWarsRPG.currentPlayer].hp;
+    starWarsRPG.currentAP = character[starWarsRPG.currentPlayer].ap;
+    $("#action").html("Attack - Power:" + starWarsRPG.currentAP);
   });
 
   $("body").on("click", ".choose-opponent", function() {
-    currentOpponent = parseInt($(this).attr("value"));
-    $("#oppChar").html("");
-    $("#start-screen").css("visibility", "hidden");
-    var i = remainingOpponents.indexOf(parseInt(currentOpponent));
-    remainingOpponents.splice(i,1);
-    addChars("choose-opponent", $("#opponents"));
-    displayImage($("#oppChar"), character[currentOpponent].jpeg);
-    $("#opponentHP").css("width","100%");
-    $("#opponentHealth").html("<span>" + character[currentOpponent].hp + " HP</span>");
-    currentOpponentHealth = character[currentOpponent].hp;
+    if(starWarsRPG.currentOpponentHealth>0) {
+      alert("Defeat current opponent first");
+    } else {
+      starWarsRPG.opponentDead = false;
+      $("#result").html("");
+      starWarsRPG.currentOpponent = parseInt($(this).attr("value"));
+      $("#oppChar").html("");
+      $("#start-screen").css("visibility", "hidden");
+      var i = starWarsRPG.remainingOpponents.indexOf(parseInt(starWarsRPG.currentOpponent));
+      starWarsRPG.remainingOpponents.splice(i,1);
+      addChars("choose-opponent", $("#opponents"));
+      displayImage($("#oppChar"), character[starWarsRPG.currentOpponent].jpeg);
+      $("#opponentHP").css("width","100%");
+      $("#opponentHealth").html("<span>" + character[starWarsRPG.currentOpponent].hp + " HP</span>");
+      starWarsRPG.currentOpponentHealth = character[starWarsRPG.currentOpponent].hp;
+      $("#action").html("Attack - Power:" + starWarsRPG.currentAP);
+    }
   });
 
-  $("body").on("click", "#action", function() {
-    currentOpponentHealth -= currentAP;
-    console.log(character[currentPlayer].ap);
-    var newPercent = currentOpponentHealth / character[currentOpponent].hp * 100;
+  $("#action").on("click", function() {
+    starWarsRPG.currentOpponentHealth -= starWarsRPG.currentAP;
+    var resultOfAttack = "<p>" + character[starWarsRPG.currentPlayer].name + " attacks for " + starWarsRPG.currentAP + " damage.</p>"
+    $("#result").html(resultOfAttack);
+    var newPercent = starWarsRPG.currentOpponentHealth / character[starWarsRPG.currentOpponent].hp * 100;
     $("#opponentHP").css("width", newPercent + "%");
-    $("#opponentHealth").html("<span>" + currentOpponentHealth + " HP</span>");
+    $("#opponentHealth").html("<span>" + starWarsRPG.currentOpponentHealth + " HP</span>");
     
-    if (currentOpponentHealth<=0) {
-    $("#opponentHP").css("width", "0%");
-    $("#opponentHealth").html("<span>0 HP</span>");      
+    if (starWarsRPG.currentOpponentHealth<=0) {
+      $("#opponentHP").css("width", "0%");
+      $("#opponentHealth").html("<span>0 HP</span>");
+      if (starWarsRPG.remainingOpponents.length === 0) {
+        if(confirm("You win! Would you like to start a new game?")) {
+          location.reload();
+        }
+      } else {
+        if (!starWarsRPG.opponentDead) {
+          starWarsRPG.currentAP+=character[starWarsRPG.currentPlayer].ap;
+        }
+        $("#result").html("You win, select new opponent");
+        starWarsRPG.opponentDead = true;
+      }
     }
     else {
-      currentPlayerHealth -= character[currentOpponent].ap;
-      currentAP+=character[currentPlayer].ap;
-      var newPercent = currentPlayerHealth / character[currentPlayer].hp * 100;
+      starWarsRPG.currentPlayerHealth -= character[starWarsRPG.currentOpponent].counter;
+      starWarsRPG.currentAP+=character[starWarsRPG.currentPlayer].ap;
+      newPercent = starWarsRPG.currentPlayerHealth / character[starWarsRPG.currentPlayer].hp * 100;
       $("#myHP").css("width", newPercent + "%");
-      $("#myHealth").html("<span>" + currentPlayerHealth + " HP</span>");
+      $("#myHealth").html("<span>" + starWarsRPG.currentPlayerHealth + " HP</span>");
+      resultOfAttack+="<p>" + character[starWarsRPG.currentOpponent].name + " attacks for " + character[starWarsRPG.currentOpponent].counter + " damage.</p>"
+      $("#result").html(resultOfAttack);
+    }
+    $("#action").html("Attack - Power:" + starWarsRPG.currentAP);
+    if (starWarsRPG.currentPlayerHealth<=0) {
+      $("#myHP").css("width", "0%");
+      $("#myHealth").html("<span>0 HP</span>"); 
+      if (confirm("You Lose! Would you like to try again?")) {
+        location.reload();
+      }
     }
   });
 
-
-
-
+  $("#restart").on("click", function() {
+    if(confirm("Are you sure you would like to restart? All progress will be lost.")) {
+      location.reload();
+    }
+  });
 
 })

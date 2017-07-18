@@ -1,15 +1,15 @@
 var character = [
-createChar("Obi-Wan Kanobi", 120, 6, "blue", "obi-wan-kenobi.jpg", "obi.png"),
-createChar("Luke Skywalker", 180, 10, "green", "luke-skywalker.jpg", "luke.png"),
-createChar("Darth Vader", 150, 8, "red", "darth-vader.jpg", "vader.png"),
-createChar("Mace Windu", 100, 5, "purple", "mace-windu.jpg", "windu.png")];
+createChar("Obi-Wan Kanobi", 120, 8, 10, "obi-wan-kenobi.jpg", "obi.png"),
+createChar("Luke Skywalker", 100, 15, 5, "luke-skywalker.jpg", "luke.png"),
+createChar("Darth Vader", 150, 7, 20, "darth-vader.jpg", "vader.png"),
+createChar("Yoda", 180, 4, 25, "yoda.jpg", "yoda.png")];
 
-function createChar(name, hp, ap, color, pic, jpeg) {
+function createChar(name, hp, ap, counter, pic, jpeg) {
   var details = {
     name: name,
     hp: hp,
     ap: ap,
-    color: color,
+    counter: counter,
     pic: pic,
     jpeg: jpeg
   };
