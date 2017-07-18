@@ -80,7 +80,6 @@ $(document).ready(function() {
   $("#action").on("click", function() {
     starWarsRPG.currentOpponentHealth -= starWarsRPG.currentAP;
     var resultOfAttack = "<p>" + character[starWarsRPG.currentPlayer].name + " attacks for " + starWarsRPG.currentAP + " damage.</p>"
-    $("#result").html(resultOfAttack);
     var newPercent = starWarsRPG.currentOpponentHealth / character[starWarsRPG.currentOpponent].hp * 100;
     $("#opponentHP").css("width", newPercent + "%");
     $("#opponentHealth").html("<span>" + starWarsRPG.currentOpponentHealth + " HP</span>");
