@@ -7,10 +7,9 @@
   position: fixed;
   top:2%;
   right:2%;
-  font-size: 5vh;
+  font-size: 3.5vh;
   z-index: 1000;
-  background-color: blue;
-  color:white;
+  background-color: gold;
 }
 
 #volumeButton {
@@ -19,9 +18,23 @@
   left:2%;
   font-size: 5vh;
   z-index: 1000;
-  background-color: blue;
-  color:white; 
+  background-color: gold;
+  border-radius: 5px;
 }
+
+h1 {
+  font-family: Monofett;
+  font-size:10vh;
+}
+
+h2 {
+  margin-top:10vh;
+  font-size: 4vh;
+  font-family: 'Homemade Apple', cursive;
+  -ms-transform: rotate(-10deg); /* IE 9 */
+  -webkit-transform: rotate(-10deg); /* Chrome, Safari, Opera */
+  transform: rotate(-10deg);
+} 
 
 #start-screen {
   text-align: center;
