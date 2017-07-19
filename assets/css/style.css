@@ -3,6 +3,10 @@
   overflow: none;
 }
 
+body {
+  overflow:hidden;
+}
+
 #restart {
   position: fixed;
   top:2%;
