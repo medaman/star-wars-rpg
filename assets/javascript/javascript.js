@@ -138,15 +138,17 @@ $(document).ready(function() {
       $("#opponentHP").css("width", "0%");
       $("#opponentHealth").html("<span>0 HP</span>");
       if (starWarsRPG.remainingOpponents.length === 0) {
-        if(confirm("You win! Would you like to start a new game?")) {
-          location.reload();
-        }
+        setTimeout(function() {
+          if(confirm("You win! Would you like to start a new game?")) {
+            location.reload();
+          }
+        }, 1000);
       } else {
         if (!starWarsRPG.opponentDead) {
           starWarsRPG.currentAP+=character[starWarsRPG.currentPlayer].ap;
         }
-        $("#result").html("You win, select new opponent");
         starWarsRPG.opponentDead = true;
+        $("#result").html("You win, select new opponent");
       }
     }
     else {
