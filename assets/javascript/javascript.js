@@ -106,7 +106,7 @@ $(document).ready(function() {
   });
 
   $("body").on("click", ".choose-opponent", function() {
-    if(starWarsRPG.currentOpponentHealth>0) {
+    if((starWarsRPG.currentOpponentHealth > 0) && (starWarsRPG.currentPlayerHealth > 0)) {
       alert("Defeat current opponent first");
     } else {
       starWarsRPG.opponentDead = false;
@@ -126,59 +126,81 @@ $(document).ready(function() {
   });
 
   $("#action").on("click", function() {
-    $("#myChar").animate({left:'40%'},100);
-    $("#myChar").animate({left:'0%'},100);
-    starWarsRPG.currentOpponentHealth -= starWarsRPG.currentAP;
-    allAudio.hit.load();
-    allAudio.hit.play();
-    var resultOfAttack = "<p>" + character[starWarsRPG.currentPlayer].name + " attacks for " + starWarsRPG.currentAP + " damage.</p>"
-    var newPercent = starWarsRPG.currentOpponentHealth / character[starWarsRPG.currentOpponent].hp * 100;
-    $("#opponentHP").css("width", newPercent + "%");
-    $("#opponentHealth").html("<span>" + starWarsRPG.currentOpponentHealth + " HP</span>");
-    
-    if (starWarsRPG.currentOpponentHealth<=0) {
-      $("#opponentHP").css("width", "0%");
-      $("#opponentHealth").html("<span>0 HP</span>");
-      if (starWarsRPG.remainingOpponents.length === 0) {
-        $("#oppChar").html("");
-        setTimeout(function() {
-          if(confirm("You win! Would you like to start a new game?")) {
-            location.reload();
+    if (starWarsRPG.currentOpponentHealth > 0) {
+      $("#myChar").animate({left:'40%'},100);
+      $("#myChar").animate({left:'0%'},100);
+      starWarsRPG.currentOpponentHealth -= starWarsRPG.currentAP;
+      allAudio.hit.load();
+      allAudio.hit.play();
+      var resultOfAttack = "<p>" + character[starWarsRPG.currentPlayer].name + " attacks for " + starWarsRPG.currentAP + " damage.</p>"
+      var newPercent = starWarsRPG.currentOpponentHealth / character[starWarsRPG.currentOpponent].hp * 100;
+      $("#opponentHP").css("width", newPercent + "%");
+      $("#opponentHealth").html("<span>" + starWarsRPG.currentOpponentHealth + " HP</span>");
+      
+      if (starWarsRPG.currentOpponentHealth<=0) {
+        $("#opponentHP").css("width", "0%");
+        $("#opponentHealth").html("<span>0 HP</span>");
+        if (starWarsRPG.remainingOpponents.length === 0) {
+          $("#oppChar").html("");
+          $("#result").html("You have won all the battles!");
+          setTimeout(function() {
+            if(confirm("You win! Would you like to start a new game?")) {
+              restartGame();
+            }
+          }, 1000);
+        } else {
+          if (!starWarsRPG.opponentDead) {
+            starWarsRPG.currentAP+=character[starWarsRPG.currentPlayer].ap;
           }
-        }, 1000);
-      } else {
-        if (!starWarsRPG.opponentDead) {
-          starWarsRPG.currentAP+=character[starWarsRPG.currentPlayer].ap;
+          starWarsRPG.opponentDead = true;
+          $("#oppChar").html("");
+          $("#result").html("You win, select new opponent");
         }
-        starWarsRPG.opponentDead = true;
-        $("#oppChar").html("");
-        $("#result").html("You win, select new opponent");
       }
-    }
-    else {
-      $("#oppChar").animate({right:'20%'},100);
-      $("#oppChar").animate({right:'0%'},100);
-      starWarsRPG.currentPlayerHealth -= character[starWarsRPG.currentOpponent].counter;
-      starWarsRPG.currentAP+=character[starWarsRPG.currentPlayer].ap;
-      newPercent = starWarsRPG.currentPlayerHealth / character[starWarsRPG.currentPlayer].hp * 100;
-      $("#myHP").css("width", newPercent + "%");
-      $("#myHealth").html("<span>" + starWarsRPG.currentPlayerHealth + " HP</span>");
-      resultOfAttack+="<p>" + character[starWarsRPG.currentOpponent].name + " attacks for " + character[starWarsRPG.currentOpponent].counter + " damage.</p>"
-      $("#result").html(resultOfAttack);
-    }
-    $("#action").html("Attack - Power:" + starWarsRPG.currentAP);
-    if (starWarsRPG.currentPlayerHealth<=0) {
-      $("#myHP").css("width", "0%");
-      $("#myHealth").html("<span>0 HP</span>"); 
-      if (confirm("You Lose! Would you like to try again?")) {
-        location.reload();
+      else {
+        $("#oppChar").animate({right:'20%'},100);
+        $("#oppChar").animate({right:'0%'},100);
+        starWarsRPG.currentPlayerHealth -= character[starWarsRPG.currentOpponent].counter;
+        starWarsRPG.currentAP+=character[starWarsRPG.currentPlayer].ap;
+        newPercent = starWarsRPG.currentPlayerHealth / character[starWarsRPG.currentPlayer].hp * 100;
+        $("#myHP").css("width", newPercent + "%");
+        $("#myHealth").html("<span>" + starWarsRPG.currentPlayerHealth + " HP</span>");
+        resultOfAttack+="<p>" + character[starWarsRPG.currentOpponent].name + " attacks for " + character[starWarsRPG.currentOpponent].counter + " damage.</p>"
+        $("#result").html(resultOfAttack);
+      }
+      $("#action").html("Attack - Power:" + starWarsRPG.currentAP);
+      if (starWarsRPG.currentPlayerHealth<=0) {
+        $("#myHP").css("width", "0%");
+        $("#myHealth").html("<span>0 HP</span>"); 
+        $("#myChar").html("");
+        setTimeout(function() {
+          if (confirm("You Lose! Would you like to try again?")) {
+            restartGame();
+          }
+        }, 1500);
       }
     }
   });
 
+  function restartGame() {
+    starWarsRPG.currentPlayer = -1;
+    starWarsRPG.currentOpponent = -1;
+    starWarsRPG.remainingOpponents = [0,1,2,3];
+    starWarsRPG.currentPlayerHealth = 0;
+    starWarsRPG.currentOpponentHealth = 0;
+    starWarsRPG.currentAP = 1;
+    starWarsRPG.opponentDead = false;
+    $("#myChar").html("");
+    $("#oppChar").html("");
+    $("#result").html("");
+    $("#start-screen").css("visibility","visible");
+    addChars("choose-character", $("#character-row"));
+    $
+  }
+
   $("#restart").on("click", function() {
     if(confirm("Are you sure you would like to restart? All progress will be lost.")) {
-      location.reload();
+      restartGame();
     }
   });
 
