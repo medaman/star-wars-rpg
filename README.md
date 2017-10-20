@@ -16,7 +16,7 @@ Star Wars RPG uses a number of open source technologies to work effectively:
 * [jQuery] - Extremely Powerful and Efficient Javascript Library
 * [Bootstrap] - Front-end web framework for designing websites and web applications
 
-   [here]: <medaman.github.io/star-wars-rpg>
+   [here]: <https://medaman.github.io/star-wars-rpg>
 
    [HTML]: <https://www.w3schools.com/html/>
    [CSS]: <https://www.w3schools.com/css/>
